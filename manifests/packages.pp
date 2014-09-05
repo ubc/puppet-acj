@@ -10,4 +10,12 @@ class acj::packages () {
   package { "zlib-devel":
     ensure => "installed"
   }
+
+  package { "nodejs":
+    ensure => "installed"
+  }
+
+  package { "npm":
+    ensure => "installed"
+  }
 }
