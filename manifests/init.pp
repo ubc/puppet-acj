@@ -36,13 +36,22 @@ class acj (
 
   include acj::packages
 
-  firewall { "100 allow $port access":
-    port   => [$port],
+  firewall { "100 allow http and https access":
+    port   => [80, 443],
     proto  => tcp,
     action => accept,
   }
 
   class { 'nginx': }
+
+  if $ssl {
+    nginx::resource::vhost { "redirect_$host":
+      ensure              => present,
+      server_name         => [$host],
+      www_root            => $docroot,
+      location_cfg_append => { 'rewrite' => '^ https://$server_name$request_uri? permanent' },
+    }
+  }
 
   nginx::resource::vhost { "$host":
     ensure => present,
@@ -58,6 +67,7 @@ class acj (
 
   nginx::resource::location { 'acj':
     vhost => $host, 
+    ssl_only => true,
     location => '@acj',
     location_custom_cfg => {
 	include => 'uwsgi_params',
@@ -67,6 +77,7 @@ class acj (
 
   nginx::resource::location { 'static':
     vhost => $host, 
+    ssl_only => $ssl,
     location => '/static',
     location_alias => '/www_data/acj/acj/static',
   }
