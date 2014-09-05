@@ -5,6 +5,7 @@ class acj (
   $timezone = 'US/Pacific',
   $ensure = 'present',
   $host     = $fqdn,
+  $port    = 80,
   $db_host = 'localhost',
   $db_user = 'acj',
   $db_password = 'acjsecret',
@@ -35,8 +36,8 @@ class acj (
 
   include acj::packages
 
-  firewall { '100 allow http access':
-    port   => [80],
+  firewall { "100 allow $port access":
+    port   => [$port],
     proto  => tcp,
     action => accept,
   }
@@ -45,6 +46,7 @@ class acj (
 
   nginx::resource::vhost { "$host":
     ensure => present,
+    listen_port => $port,
     ssl => $ssl,
     ssl_cert => $ssl_cert,
     ssl_key  => $ssl_key,
