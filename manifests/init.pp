@@ -42,7 +42,9 @@ class acj (
     action => accept,
   }
 
-  class { 'nginx': }
+  class { 'nginx': 
+    client_max_body_size => '30m', # instructor wants larger pdf uploads
+  }
 
   if $ssl {
     nginx::resource::vhost { "redirect_$host":
@@ -54,6 +56,7 @@ class acj (
   }
 
   nginx::resource::vhost { "$host":
+    client_max_body_size => '30m', # instructor wants larger pdf uploads
     ensure => present,
     listen_port => $port,
     ssl => $ssl,
