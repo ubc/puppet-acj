@@ -64,8 +64,9 @@ class acj (
     ssl_key  => $ssl_key,
     ssl_port => $ssl_port,
     location_custom_cfg => {
-	try_files => '$uri @acj',
-    }
+      try_files => '$uri @acj',
+    },
+    gzip_types => 'text/css application/javascript application/json'
   }
 
   nginx::resource::location { 'acj':
