@@ -75,7 +75,9 @@ class acj (
     location => '@acj',
     location_custom_cfg => {
 	include => 'uwsgi_params',
-  	uwsgi_pass => 'unix:/tmp/uwsgi.sock'
+  	uwsgi_pass => 'unix:/tmp/uwsgi.sock',
+   	fastcgi_read_timeout => '10m',
+	fastcgi_send_timeout => '10m',	
     }
   }
 
